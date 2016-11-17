@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
-//import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
 @TeleOp(name="MRBDriveTest", group="Exercises")
@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class MRBDriveTest extends LinearOpMode {
     DcMotor leftMotor, rightMotor ,  intakeMotor, shooterMotor ;
     Servo doorServo, beaconServo;
-  //  ColorSensor beaconColor;
+    ColorSensor beaconColor;
     float leftY, rightY, linputY, rinputY;
     String ProgramName, colorState;
     double doorPosition, beaconPosition;
@@ -28,9 +28,9 @@ public class MRBDriveTest extends LinearOpMode {
         shooterMotor = hardwareMap.dcMotor.get("shooter_motor");
         doorServo = hardwareMap.servo.get("door_servo");
         beaconServo = hardwareMap.servo.get("beacon_servo");
-        //beaconColor = hardwareMap.colorSensor.get("beacon_color");
+        beaconColor = hardwareMap.colorSensor.get("beacon_color");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        ProgramName = "MRB_11_16_16_8";
+        ProgramName = "MRB_11_17_16_2";
         telemetry.addData("Mode", "waiting");
         telemetry.addLine("ProgramName = " + ProgramName);
         telemetry.update();
@@ -93,18 +93,18 @@ public class MRBDriveTest extends LinearOpMode {
                     beaconPosition = 1.0;
                 }
 
-//                if (beaconColor.red() <= beaconColor.blue())
-//                {
-//                    colorState = "Blue";
-//                }
-//                else if(beaconColor.red() >= beaconColor.blue())
-//                {
-//                    colorState = "Red";
-//                }
-//                else
-//                {
-//                    colorState = "Blue";
-//                }
+                if (beaconColor.red() <= beaconColor.blue())
+                {
+                    colorState = "Blue";
+                }
+                else if(beaconColor.red() >= beaconColor.blue())
+                {
+                    colorState = "Red";
+                }
+                else
+                {
+                    colorState = "Blue";
+             }
                 doorServo.setPosition(doorPosition);
                 beaconServo.setPosition(beaconPosition);
 

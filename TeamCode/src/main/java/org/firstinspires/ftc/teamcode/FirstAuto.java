@@ -6,12 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@Autonomous(name="Drive Encoder", group="Exercises")
+@Autonomous(name="NearAuto", group="Exercises")
 //@Disabled
-public class DriveWIthEncoder extends LinearOpMode
+public class FirstAuto extends LinearOpMode
 {
     DcMotor leftMotor;
     DcMotor rightMotor;
+    String programVersion;
     ColorSensor beaconColor;
 
     @Override
@@ -20,6 +21,7 @@ public class DriveWIthEncoder extends LinearOpMode
         leftMotor = hardwareMap.dcMotor.get("left_motor");
         rightMotor = hardwareMap.dcMotor.get("right_motor");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        programVersion = "MRB_11_17_16_2";
 
         // reset encoder count kept by motor.
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -77,14 +79,14 @@ public class DriveWIthEncoder extends LinearOpMode
         }
         leftMotor.setPower(0);
         rightMotor.setPower(0);
-        leftMotor.setTargetPosition(-2952);
-        rightMotor.setTargetPosition(-2196);
+        leftMotor.setTargetPosition(-2852);
+        rightMotor.setTargetPosition(-2096);
         leftMotor.setPower(-0.25);
         rightMotor.setPower(-0.25);
 
         while (opModeIsActive() && leftMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
         {
-
+            telemetry.addLine(programVersion);
             telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
             telemetry.update();
             idle();
@@ -94,29 +96,48 @@ public class DriveWIthEncoder extends LinearOpMode
 
         while (opModeIsActive() && rightMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
         {
-
+            telemetry.addLine(programVersion);
             telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
             telemetry.update();
             idle();
         }
         leftMotor.setPower(0);
         rightMotor.setPower(0);
-        leftMotor.setTargetPosition(-3300);
-        rightMotor.setTargetPosition(-3960);
-        leftMotor.setPower(-0.15);
-        rightMotor.setPower(-0.4);
+        leftMotor.setTargetPosition(-3179);
+        rightMotor.setTargetPosition(-3850);
+        leftMotor.setPower(-0.2);
+        rightMotor.setPower(-0.5);
         while (opModeIsActive() && rightMotor.isBusy() && leftMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
         {
 
             telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
+            telemetry.addLine(programVersion);
             telemetry.update();
             idle();
         }
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+        leftMotor.setTargetPosition(-2979);
+        rightMotor.setTargetPosition(-3951);
+        leftMotor.setPower(0.21);
+        rightMotor.setPower(-0.21);
+        while (opModeIsActive() && rightMotor.isBusy() && leftMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
+        {
+
+            telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
+            telemetry.addLine(programVersion);
+            telemetry.update();
+
+            idle();
+        }
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+
+
         while (opModeIsActive())
         {
             telemetry.addData("encoder-end", leftMotor.getCurrentPosition());
+            telemetry.addLine(programVersion);
             telemetry.update();
             idle();
         }
