@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
+
 @TeleOp(name="MRBDriveTest", group="Exercises")
 //@Disabled
 public class MRBDriveTest extends LinearOpMode {
@@ -30,7 +31,7 @@ public class MRBDriveTest extends LinearOpMode {
         beaconServo = hardwareMap.servo.get("beacon_servo");
         beaconColor = hardwareMap.colorSensor.get("beacon_color");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        ProgramName = "MRB_11_17_16_2";
+        ProgramName = "MRB_11_19_16_1";
         telemetry.addData("Mode", "waiting");
         telemetry.addLine("ProgramName = " + ProgramName);
         telemetry.update();
@@ -41,7 +42,7 @@ public class MRBDriveTest extends LinearOpMode {
 
         //intakeMotor.setPower(0);
 
-
+        doorServo.setPosition(0.5);
         waitForStart();
         autoShoot.start();
         doorServo.setPosition(0.5);
@@ -84,15 +85,38 @@ public class MRBDriveTest extends LinearOpMode {
 
                 // Gamepad 2 commands
                 if (gamepad2.a) {
-                    beaconPosition = -0.5;
+                    beaconPosition = 0.5;
+                    beaconServo.setPosition(0.5);
                 }
                 if (gamepad2.b) {
                     beaconPosition = 0.6;
                 }
                 if (gamepad2.y) {
                     beaconPosition = 1.0;
+                    beaconServo.setPosition(1.0);
                 }
-
+                if (gamepad2.x)
+                {
+                    shooterMotor.setPower(1);
+                    sleep(800);
+                    shooterMotor.setPower(0);
+                }
+                if (gamepad2.dpad_left)
+                {
+                    intakeMotor.setPower(-1);
+                    sleep(20);
+                    intakeMotor.setPower(1);
+                }
+                if (gamepad2.dpad_up)
+                {
+                    doorServo.setPosition(0.1);
+                    doorPosition = 0.1;
+                }
+                if (gamepad2.dpad_down)
+                {
+                    doorPosition = 0.5;
+                    doorServo.setPosition(0.5);
+                }
                 if (beaconColor.red() <= beaconColor.blue())
                 {
                     colorState = "Blue";
