@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -12,12 +13,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Created by Mark on 11/17/2016.
  */
-
-public class DriveStright extends LinearOpMode
-{
+@Disabled
+public class DriveStright extends LinearOpMode {
     DcMotor leftMotor;
     DcMotor rightMotor;
-    DcMotor shooterMotor, intakeMotor;
+    DcMotor shooterMotor, intakeMotor1, intakeMotor2;
     Servo beaconServo, doorServo;
     ColorSensor beaconColor;
     String programVersion;
@@ -25,13 +25,13 @@ public class DriveStright extends LinearOpMode
 
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
 
         leftMotor = hardwareMap.dcMotor.get("left_motor");
         rightMotor = hardwareMap.dcMotor.get("right_motor");
         shooterMotor = hardwareMap.dcMotor.get("shooter_motor");
-        intakeMotor = hardwareMap.dcMotor.get("intake_motor");
+        intakeMotor1 = hardwareMap.dcMotor.get("intake_motor1");
+        intakeMotor2 = hardwareMap.dcMotor.get("intake_motor2");
         beaconServo = hardwareMap.servo.get("beacon_servo");
         doorServo = hardwareMap.servo.get("door_servo");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -59,15 +59,44 @@ public class DriveStright extends LinearOpMode
 
         //Drive to shooting position
 
-        leftMotor.setTargetPosition(-1400);
-        rightMotor.setTargetPosition(-1400);
-
+        leftMotor.setTargetPosition(-1000);
+        rightMotor.setTargetPosition(-1000);
+        sleep(5000);
         // set both motors to 25% power. Movement will start.
 
-        leftMotor.setPower(-0.25);
-        rightMotor.setPower(-0.25);
 
+        while (leftMotor.isBusy()) {
+            leftMotor.setPower(-0.25);
+            rightMotor.setPower(-0.25);
+        }
 
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+        sleep(100);
+        doorServo.setPosition(0.3);
+        doorPosition = 0.1;
+        sleep(700);
+        doorServo.setPosition(-0.8);
+        doorPosition = 0.5;
+        sleep(200);
+        shooterMotor.setPower(1);
+        sleep(800);
+        shooterMotor.setPower(0);
+        intakeMotor1.setPower(1);
+        intakeMotor2.setPower(1);
+        doorServo.setPosition(0.3);
+        doorPosition = 0.1;
+        sleep(700);
+        intakeMotor1.setPower(0);
+        intakeMotor2.setPower(0);
+        doorServo.setPosition(0.8);
+        doorPosition = 0.5;
+        sleep(200);
+        shooterMotor.setPower(1);
+        sleep(800);
+        shooterMotor.setPower(0);
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
         while (opModeIsActive() && leftMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
         {
             telemetry.addLine(programVersion);
@@ -75,53 +104,27 @@ public class DriveStright extends LinearOpMode
             telemetry.update();
             idle();
         }
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-// shoot
-        doorServo.setPosition(0.1);
-        doorPosition = 0.1;
-        sleep(700);
-        doorServo.setPosition(0.5);
-        doorPosition = 0.5;
-        sleep(200);
-        shooterMotor.setPower(1);
-        sleep(800);
-        shooterMotor.setPower(0);
-        intakeMotor.setPower(1);
-        doorServo.setPosition(0.1);
-        doorPosition = 0.1;
-        sleep(700);
-        intakeMotor.setPower(0);
-        doorServo.setPosition(0.5);
-        doorPosition = 0.5;
-        sleep(200);
-        shooterMotor.setPower(1);
-        sleep(800);
-        shooterMotor.setPower(0);
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
+            // whack the ball
+            leftMotor.setTargetPosition(-3000);
+            rightMotor.setTargetPosition(-3000);
+            leftMotor.setPower(-1);
+            rightMotor.setPower(-1);
 
-        // whack the ball
-        leftMotor.setTargetPosition(-3000);
-        rightMotor.setTargetPosition(-3000);
-        leftMotor.setPower(-1);
-        rightMotor.setPower(-1);
-
-        while (opModeIsActive() && leftMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
-        {
-            telemetry.addLine(programVersion);
-            telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
-            telemetry.update();
-            idle();
-        }
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-        while (opModeIsActive())
-        {
-            telemetry.addData("encoder-end", leftMotor.getCurrentPosition());
-            telemetry.update();
-            idle();
+            while (opModeIsActive() && leftMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
+            {
+                telemetry.addLine(programVersion);
+                telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
+                telemetry.update();
+                idle();
+            }
+            leftMotor.setPower(0);
+            rightMotor.setPower(0);
+            while (opModeIsActive()) {
+                telemetry.addData("encoder-end", leftMotor.getCurrentPosition());
+                telemetry.update();
+                idle();
+            }
         }
     }
-}
+
 

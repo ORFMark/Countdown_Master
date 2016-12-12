@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
  * Created by Mark on 11/12/2016.
  */
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Servo", group="Exercises")
+@Disabled
 public class KegeganServo extends LinearOpMode
         {
         Servo Servo1, Servo2, Servo3, Servo4;
