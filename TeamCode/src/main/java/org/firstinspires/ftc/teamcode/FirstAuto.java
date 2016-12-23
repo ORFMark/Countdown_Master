@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name="NearAuto", group="Exercises")
-//@Disabled
+@Disabled
 public class FirstAuto extends LinearOpMode
 {
     DcMotor leftMotor;
@@ -52,8 +52,7 @@ public class FirstAuto extends LinearOpMode
         telemetry.addData("Mode", "running");
         telemetry.update();
 
-        leftMotor.setPower(-0.1); //Sean: Try slowing this down to see if just skipping over position maybe like 0.1 or 0.05 power.
-        rightMotor.setPower(-0.1);
+
 
         // set left motor to run for 5000 encoder counts.
 
@@ -62,18 +61,22 @@ public class FirstAuto extends LinearOpMode
 
         // set both motors to 25% power. Movement will start.
 
-
+while (leftMotor.getCurrentPosition() <= 1000)
+{
+    leftMotor.setPower(-0.1); //Sean: Try slowing this down to see if just skipping over position maybe like 0.1 or 0.05 power.
+    rightMotor.setPower(-0.1);
+}
 
         // wait while opmode is active and left motor is busy running to position.
 
         while (opModeIsActive() && leftMotor.isBusy())   //.getCurrentPosition() > leftMotor.getTargetPosition())
-        {
+
 
             telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
             telemetry.addData("MotorPower", + leftMotor.getPower() + ", " + rightMotor.getPower() );
             telemetry.update();
             idle();
-        }
+
         leftMotor.setPower(0);
         rightMotor.setPower(0);
         if (leftMotor.getCurrentPosition() >= 1500)

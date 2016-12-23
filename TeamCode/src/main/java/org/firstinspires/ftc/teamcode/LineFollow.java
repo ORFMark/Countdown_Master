@@ -7,10 +7,12 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 @Autonomous(name="BeaconWIP", group="Exercises")
+@Disabled
 public class LineFollow extends LinearOpMode {
 
     DcMotor rightMotor, leftMotor;
