@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@Autonomous(name="AutoFix", group="Exercises")
+@Autonomous(name="RedBeacon", group="Exercises")
 //@Disabled
 public class NewAuto extends LinearOpMode
 {
@@ -16,6 +17,7 @@ public class NewAuto extends LinearOpMode
     Servo doorServo, beaconServo;
     int loopCount, newLoopCount;
     String programVersion;
+    ColorSensor lineColor;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -27,6 +29,7 @@ public class NewAuto extends LinearOpMode
         shooterMotor = hardwareMap.dcMotor.get("shooter_motor");
         doorServo = hardwareMap.servo.get("door_servo");
         beaconServo = hardwareMap.servo.get("beacon_servo");
+        lineColor = hardwareMap.colorSensor.get("line_color");
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
         programVersion = "MRB_12_15_16_3";
         // reset encoder count kept by motor.
@@ -107,8 +110,23 @@ while (opModeIsActive()) {
     rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     leftMotor.setTargetPosition(300);
     rightMotor.setTargetPosition(300);
-    sleep(1000);
-while (opModeIsActive() && rightMotor.getCurrentPosition() >= -30)
+    sleep(500);
+    leftMotor.setPower(0.04);
+    rightMotor.setPower(0.4);
+    while (opModeIsActive() && leftMotor.getCurrentPosition() >= -100)
+    {
+        telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
+        telemetry.addData("MotorPower: ", "leftMotor: " + leftMotor.getPower(), "rightMotor" + rightMotor.getPower());
+        telemetry.addLine(programVersion);
+        telemetry.update();
+        idle();
+    }
+    leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    leftMotor.setTargetPosition(300);
+    rightMotor.setTargetPosition(300);
+    sleep(500);
+while (opModeIsActive() && rightMotor.getCurrentPosition() >= -120)
 {
     rightMotor.setPower(0.1);
     leftMotor.setPower(0);
@@ -117,7 +135,17 @@ while (opModeIsActive() && rightMotor.getCurrentPosition() >= -30)
 }
 leftMotor.setPower(0);
     rightMotor.setPower(0);
+    sleep(1000);
 
+    leftMotor.setPower(0.04);
+    rightMotor.setPower(0.04);
+    while (opModeIsActive() && lineColor.blue() <= 10) {
+        telemetry.addData("blue", lineColor.blue() );
+        telemetry.addData("Power", "right: " + rightMotor.getPower(), " , left: " + leftMotor.getPower() );
+        telemetry.update();
+    }
+    leftMotor.setPower(0);
+    rightMotor.setPower(0);
     while (opModeIsActive()) {
         telemetry.addData("encoder-wait", leftMotor.getCurrentPosition());
         telemetry.addData("doorServo", doorServo.getPosition() + " beaconServo", beaconServo.getPosition());
