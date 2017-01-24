@@ -51,12 +51,12 @@ public class MRBDriveTest extends LinearOpMode {
         leftY = 0;
         rightY = 0;
         liftPower = 0;
-
+        liftdrive = false;
         waitForStart();
         autoShoot.start();
         doorServo.setPosition(0.3);
         liftServo.setPosition(-0.3);
-        //liftdrive = false;
+
 
 
         try {
@@ -70,7 +70,7 @@ public class MRBDriveTest extends LinearOpMode {
                 leftY = gamepad1.left_stick_y;
                 rightY = gamepad1.right_stick_y;
                 //Stick Dead Zone
-                //if (liftdrive = false) {
+                if (liftdrive = false) {
                     if (leftY <= .2 && leftY >= -0.2)
                         linputY = 0;
                     else
@@ -80,7 +80,7 @@ public class MRBDriveTest extends LinearOpMode {
                         rinputY = 0;
                     else
                         rinputY = rightY;
-                /* }
+                 }
                 if (liftdrive = true)
                 {
                     if (leftY <= .2 && leftY >= -0.2)
@@ -109,21 +109,9 @@ public class MRBDriveTest extends LinearOpMode {
 
                 if (gamepad1.y)
                     shooterPower=0;
-                /*
-                if (gamepad1.b)
-                {
-                    liftdrive = !liftdrive;
-                    if (liftdrive = false)
-                    {
-                        liftServo.setPosition(0.3);
-                    }
-                    if (liftdrive = true);
-                    {
-                        liftServo.setPosition(1.0);
-                    }
 
-                }
-                */
+
+
                 if (gamepad1.left_bumper) {
                     liftServo.setPosition(-0.3);
                 }
@@ -157,7 +145,7 @@ public class MRBDriveTest extends LinearOpMode {
 
                 if (gamepad2.right_bumper)
                 {
-                    doorServo.setPosition(-0.9);
+                    doorServo.setPosition(0.9);
                 }
                 if (gamepad2.left_bumper)
                 {
@@ -165,7 +153,7 @@ public class MRBDriveTest extends LinearOpMode {
                 }
                 if (gamepad2.dpad_up)
                 {
-                    liftPower = (float) -1;
+                    liftPower = (float) -.75;
                 }
                 if (gamepad2.dpad_down)
                 {
@@ -196,7 +184,7 @@ public class MRBDriveTest extends LinearOpMode {
                 intakeMotor2.setPower(Range.clip(intakePower, -1.0, 1.0));
                 liftMotor.setPower(Range.clip(liftPower, -1.0, 1.0));
 
-                telemetry.addData("Mode", "runnin0g");
+                telemetry.addData("Mode", "running");
                 telemetry.addLine("ProgramName = " + ProgramName);
                 telemetry.addData("sticks", "  left=" + leftY + "  right=" + rightY);
                 if (liftdrive = false)
@@ -238,7 +226,7 @@ public class AutoShoot extends Thread
         try {
             while (!interrupted()) {
                 if (gamepad1.x) {
-                    doorServo.setPosition(-0.9);
+                    doorServo.setPosition(0.9);
                     doorPosition = 0.1;
                     sleep(700);
                     doorServo.setPosition(0.3);
@@ -253,6 +241,11 @@ public class AutoShoot extends Thread
                     shooterMotor.setPower(1);
                     sleep(800);
                     shooterMotor.setPower(0);
+                }
+                if (gamepad1.b)
+                {
+                    liftdrive = !liftdrive;
+                    sleep(500);
                 }
                 idle();
             }
