@@ -34,7 +34,7 @@ public class MRBDriveTest extends LinearOpMode {
         beaconColor = hardwareMap.colorSensor.get("beacon_color");
         liftServo = hardwareMap.servo.get("lift_servo");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        ProgramName = "MRB_1_30_17_1";
+        ProgramName = "MRB_2_1_17_1";
         telemetry.addData("Mode", "waiting");
         telemetry.addLine("ProgramName = " + ProgramName);
         telemetry.update();
@@ -54,7 +54,7 @@ public class MRBDriveTest extends LinearOpMode {
         liftPower = 0;
         waitForStart();
         autoShoot.start();
-        doorServo.setPosition(0.3);
+        doorServo.setPosition(0.9);
         liftServo.setPosition(-0.3);
 
 
