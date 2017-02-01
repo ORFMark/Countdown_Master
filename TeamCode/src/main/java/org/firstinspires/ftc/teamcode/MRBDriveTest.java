@@ -18,7 +18,7 @@ public class MRBDriveTest extends LinearOpMode {
     float leftY, rightY, linputY, rinputY, shooterPower, intakePower, liftPower;
     String ProgramName, colorState;
     double doorPosition, beaconPosition;
-    boolean liftdrive;
+    public boolean liftDrive;
     Thread autoShoot = new AutoShoot();
     // called when init button is  pressed.
     @Override
@@ -34,7 +34,7 @@ public class MRBDriveTest extends LinearOpMode {
         beaconColor = hardwareMap.colorSensor.get("beacon_color");
         liftServo = hardwareMap.servo.get("lift_servo");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        ProgramName = "MRB_12_10_16_2";
+        ProgramName = "MRB_1_30_17_1";
         telemetry.addData("Mode", "waiting");
         telemetry.addLine("ProgramName = " + ProgramName);
         telemetry.update();
@@ -44,14 +44,14 @@ public class MRBDriveTest extends LinearOpMode {
 
 
         //intakeMotor.setPower(0);
-
-        doorServo.setPosition(0.3);
+        liftDrive = false;
+        doorServo.setPosition(0.9);
+        liftServo.setPosition(-0.3);
         intakePower = 0;
         shooterPower = 0;
         leftY = 0;
         rightY = 0;
         liftPower = 0;
-        liftdrive = false;
         waitForStart();
         autoShoot.start();
         doorServo.setPosition(0.3);
@@ -59,8 +59,9 @@ public class MRBDriveTest extends LinearOpMode {
 
 
 
-        try {
 
+        try {
+            liftDrive = false;
 
             while (opModeIsActive()) {
                 //shooterMotor.setPower(0);
@@ -70,7 +71,7 @@ public class MRBDriveTest extends LinearOpMode {
                 leftY = gamepad1.left_stick_y;
                 rightY = gamepad1.right_stick_y;
                 //Stick Dead Zone
-                if (liftdrive = false) {
+                if (liftDrive == false) {
                     if (leftY <= .2 && leftY >= -0.2)
                         linputY = 0;
                     else
@@ -81,7 +82,7 @@ public class MRBDriveTest extends LinearOpMode {
                     else
                         rinputY = rightY;
                  }
-                if (liftdrive = true)
+               else if (liftDrive == true)
                 {
                     if (leftY <= .2 && leftY >= -0.2)
                         linputY = 0;
@@ -93,12 +94,13 @@ public class MRBDriveTest extends LinearOpMode {
                     else
                         rinputY = rightY / 2;
                 }
-/*
-            rinputY = rightY;
-            linputY = leftY;
+                else {
+                    rinputY = rightY;
+                    linputY = leftY;
+                }
             // end drive Code
 
-*/
+
                 //Gamepad 1 Commands
                 if (gamepad1.dpad_up)
                     intakePower=1;
@@ -110,13 +112,17 @@ public class MRBDriveTest extends LinearOpMode {
                 if (gamepad1.y)
                     shooterPower=0;
 
-
+                if (gamepad1.b)
+                {
+                    liftDrive = !liftDrive;
+                }
 
                 if (gamepad1.left_bumper) {
                     liftServo.setPosition(-0.3);
                 }
                 if (gamepad1.right_bumper) {
                     liftServo.setPosition(0.8);
+
                 }
                 // Gamepad 2 commands
                 if (gamepad2.a) {
@@ -187,11 +193,11 @@ public class MRBDriveTest extends LinearOpMode {
                 telemetry.addData("Mode", "running");
                 telemetry.addLine("ProgramName = " + ProgramName);
                 telemetry.addData("sticks", "  left=" + leftY + "  right=" + rightY);
-                if (liftdrive = false)
+                if (liftDrive == false)
                 {
                     telemetry.addLine("Normal Driving");
                 }
-                if (liftdrive = true)
+                if (liftDrive == true)
                 {
                     telemetry.addLine("Lift Drive");
                 }
@@ -226,10 +232,10 @@ public class AutoShoot extends Thread
         try {
             while (!interrupted()) {
                 if (gamepad1.x) {
-                    doorServo.setPosition(0.9);
+                    doorServo.setPosition(0.3);
                     doorPosition = 0.1;
                     sleep(700);
-                    doorServo.setPosition(0.3);
+                    doorServo.setPosition(0.9);
                     doorPosition = 0.3;
                     sleep(200);
                     shooterMotor.setPower(1);
@@ -242,11 +248,7 @@ public class AutoShoot extends Thread
                     sleep(800);
                     shooterMotor.setPower(0);
                 }
-                if (gamepad1.b)
-                {
-                    liftdrive = !liftdrive;
-                    sleep(500);
-                }
+
                 idle();
             }
         }
