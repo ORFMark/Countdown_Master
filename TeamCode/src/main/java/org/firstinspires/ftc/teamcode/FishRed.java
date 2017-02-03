@@ -13,7 +13,7 @@ public class FishRed extends LinearOpMode
     DcMotor leftMotor;
     DcMotor rightMotor;
     DcMotor intakeMotor1, intakeMotor2, shooterMotor;
-    Servo doorServo, beaconServo;
+    Servo doorServo, beaconServo, liftServo;
     int loopCount, newLoopCount;
     String programVersion;
 
@@ -27,6 +27,7 @@ public class FishRed extends LinearOpMode
         shooterMotor = hardwareMap.dcMotor.get("shooter_motor");
         doorServo = hardwareMap.servo.get("door_servo");
         beaconServo = hardwareMap.servo.get("beacon_servo");
+        liftServo = hardwareMap.servo.get("lift_servo");
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
         programVersion = "MRB_2_1_17_1";
         // reset encoder count kept by motor.
@@ -40,6 +41,7 @@ public class FishRed extends LinearOpMode
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         beaconServo.setPosition(0.9);
         doorServo.setPosition(0.3);
+        liftServo.setPosition(-0.3);
         loopCount = 0;
         telemetry.addData("Mode", "waiting");
         telemetry.update();

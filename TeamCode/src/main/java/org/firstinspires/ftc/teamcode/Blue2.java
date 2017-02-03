@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="BlueFish", group="Exercises")
+@Autonomous(name="Blue2", group="Exercises")
 //@Disabled
-public class FishBlue extends LinearOpMode
+public class Blue2 extends LinearOpMode
 {
     DcMotor leftMotor;
     DcMotor rightMotor;
@@ -57,8 +57,8 @@ public class FishBlue extends LinearOpMode
             // set left motor to run for 1000 encoder counts.
             leftMotor.setPower(0.04);
             rightMotor.setPower(0.04);
-            leftMotor.setTargetPosition(900);
-            rightMotor.setTargetPosition(900);
+            leftMotor.setTargetPosition(100);
+            rightMotor.setTargetPosition(100);
 
             // set both motors to 25% power. Movement will start.
 
@@ -67,7 +67,7 @@ public class FishBlue extends LinearOpMode
 
             // wait while opmode is active and left motor is busy running to position.
 
-            while (opModeIsActive() && leftMotor.getCurrentPosition() >= -775 )   //.getCurrentPosition() > leftMotor.getTargetPosition())
+            while (opModeIsActive() && leftMotor.getCurrentPosition() >= -200 )   //.getCurrentPosition() > leftMotor.getTargetPosition())
             {
                 telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
                 telemetry.addData("MotorPower: ", "leftMotor: " + leftMotor.getPower(), "rightMotor" + rightMotor.getPower());
@@ -77,9 +77,61 @@ public class FishBlue extends LinearOpMode
             }
             leftMotor.setPower(0);
             rightMotor.setPower(0);
+            leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            sleep(200);
+            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftMotor.setPower(0.04);
+            rightMotor.setPower(0.04);
+            leftMotor.setTargetPosition(100);
+            rightMotor.setTargetPosition(100);
 
+            // set both motors to 25% power. Movement will start.
+
+            leftMotor.setPower(0);
+            rightMotor.setPower(0.04);
+
+            // wait while opmode is active and left motor is busy running to position.
+
+            while (opModeIsActive() && rightMotor.getCurrentPosition() >= -30 )   //.getCurrentPosition() > leftMotor.getTargetPosition())
+            {
+                telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
+                telemetry.addData("MotorPower: ", "leftMotor: " + leftMotor.getPower(), "rightMotor" + rightMotor.getPower());
+                telemetry.addLine(programVersion);
+                telemetry.update();
+                idle();
+            }
 
             // set motor power to zero to stop motors.
+            leftMotor.setPower(0.0);
+            rightMotor.setPower(0.0);
+            leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            sleep(200);
+            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftMotor.setPower(0.04);
+            rightMotor.setPower(0.04);
+            leftMotor.setTargetPosition(100);
+            rightMotor.setTargetPosition(100);
+
+            // set both motors to 25% power. Movement will start.
+
+            leftMotor.setPower(0.04);
+            rightMotor.setPower(0.04);
+
+            // wait while opmode is active and left motor is busy running to position.
+
+            while (opModeIsActive() && leftMotor.getCurrentPosition() >= -800 )   //.getCurrentPosition() > leftMotor.getTargetPosition())
+            {
+                telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
+                telemetry.addData("MotorPower: ", "leftMotor: " + leftMotor.getPower(), "rightMotor" + rightMotor.getPower());
+                telemetry.addLine(programVersion);
+                telemetry.update();
+                idle();
+            }
+
             leftMotor.setPower(0.0);
             rightMotor.setPower(0.0);
             doorServo.setPosition(0.3);
@@ -132,9 +184,9 @@ public class FishBlue extends LinearOpMode
             leftMotor.setTargetPosition(300);
             rightMotor.setTargetPosition(300);
             sleep(500);
-            rightMotor.setPower(0);
-            leftMotor.setPower(0.1);
-            while (opModeIsActive() && leftMotor.getCurrentPosition() >= -200)
+            rightMotor.setPower(0.1);
+            leftMotor.setPower(0);
+            while (opModeIsActive() && rightMotor.getCurrentPosition() >= -200)
             {
                 telemetry.addData("encoder-wait", rightMotor.getCurrentPosition());
                 telemetry.update();
