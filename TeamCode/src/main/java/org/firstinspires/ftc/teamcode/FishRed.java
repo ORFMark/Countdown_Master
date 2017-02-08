@@ -40,7 +40,7 @@ public class FishRed extends LinearOpMode
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         beaconServo.setPosition(0.9);
-        doorServo.setPosition(0.3);
+        doorServo.setPosition(0.9);
         liftServo.setPosition(-0.3);
         loopCount = 0;
         telemetry.addData("Mode", "waiting");
@@ -55,19 +55,17 @@ public class FishRed extends LinearOpMode
             telemetry.update();
 
             // set left motor to run for 1000 encoder counts.
-            leftMotor.setPower(0.04);
-            rightMotor.setPower(0.04);
+            leftMotor.setPower(0.4);
+            rightMotor.setPower(0.4);
             leftMotor.setTargetPosition(900);
             rightMotor.setTargetPosition(900);
 
             // set both motors to 25% power. Movement will start.
 
-            leftMotor.setPower(0.04);
-            rightMotor.setPower(0.04);
 
             // wait while opmode is active and left motor is busy running to position.
 
-            while (opModeIsActive() && leftMotor.getCurrentPosition() >= -850)   //.getCurrentPosition() > leftMotor.getTargetPosition())
+            while (opModeIsActive() && leftMotor.getCurrentPosition() >= 850)   //.getCurrentPosition() > leftMotor.getTargetPosition())
             {
                 telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
                 telemetry.addData("MotorPower: ", "leftMotor: " + leftMotor.getPower(), "rightMotor" + rightMotor.getPower());
@@ -101,20 +99,22 @@ public class FishRed extends LinearOpMode
             shooterMotor.setPower(0);
             intakeMotor1.setPower(0);
             intakeMotor2.setPower(0);
+            doorServo.setPosition(0.9);
             newLoopCount = loopCount++;
             leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             sleep(200);
             leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            leftMotor.setTargetPosition(300);
-            rightMotor.setTargetPosition(300);
+            sleep(200);
+            leftMotor.setTargetPosition(3000);
+            rightMotor.setTargetPosition(3000);
             sleep(1000);
-            rightMotor.setPower(0.1);
-            leftMotor.setPower(0);
-            while (opModeIsActive() && rightMotor.getCurrentPosition() >= -200)
+            leftMotor.setPower(-0.4);
+            rightMotor.setPower(0);
+            while (opModeIsActive() && leftMotor.getCurrentPosition() >= 2700)
             {
-                telemetry.addData("encoder-wait", rightMotor.getCurrentPosition());
+                telemetry.addData("encoder-wait", leftMotor.getCurrentPosition());
                 telemetry.update();
             }
             leftMotor.setPower(0);
@@ -125,11 +125,11 @@ public class FishRed extends LinearOpMode
             leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            leftMotor.setTargetPosition(1000);
-            rightMotor.setTargetPosition(1000);
-            leftMotor.setPower(0.1);
-            rightMotor.setPower(0.1);
-            while (opModeIsActive() && leftMotor.getCurrentPosition() >= -1000) {
+            leftMotor.setTargetPosition(2000);
+            rightMotor.setTargetPosition(2000);
+            leftMotor.setPower(0.8);
+            rightMotor.setPower(0.8);
+            while (opModeIsActive() && leftMotor.getCurrentPosition() >= -2000) {
                 telemetry.addData("encoder-wait", leftMotor.getCurrentPosition());
                 telemetry.addData("doorServo", doorServo.getPosition() + " beaconServo", beaconServo.getPosition());
                 telemetry.addData("loop", loopCount + ", ", newLoopCount);

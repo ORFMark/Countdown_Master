@@ -87,12 +87,12 @@ public class MRBDriveTest extends LinearOpMode {
                     if (leftY <= .2 && leftY >= -0.2)
                         linputY = 0;
                     else
-                        linputY = leftY / 2;
+                        linputY = leftY * (float) 0.6;
 
                     if (rightY <= .2 && rightY >= -.2)
                         rinputY = 0;
                     else
-                        rinputY = rightY / 2;
+                        rinputY = rightY * (float) 0.6;
                 }
                 else {
                     rinputY = rightY;
