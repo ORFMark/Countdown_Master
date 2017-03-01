@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 @TeleOp(name="MRBDriveTest", group="Exercises")
 //@Disabled
 public class MRBDriveTest extends LinearOpMode {
-    DcMotor leftMotor, rightMotor ,  intakeMotor1, intakeMotor2, shooterMotor, liftMotor ;
+    DcMotor leftMotor, rightMotor, intakeMotor1, intakeMotor2, shooterMotor, liftMotor;
     Servo doorServo, beaconServo, liftServo;
     ColorSensor beaconColor;
     float leftY, rightY, linputY, rinputY, shooterPower, intakePower, liftPower;
@@ -21,8 +21,9 @@ public class MRBDriveTest extends LinearOpMode {
     public boolean liftDrive;
     Thread autoShoot = new AutoShoot();
     // called when init button is  pressed.
-    @Override
-    public void runOpMode() throws InterruptedException {
+
+
+    public void IntHardware() {
         leftMotor = hardwareMap.dcMotor.get("left_motor");
         rightMotor = hardwareMap.dcMotor.get("right_motor");
         intakeMotor1 = hardwareMap.dcMotor.get("intake_motor1");
@@ -35,6 +36,69 @@ public class MRBDriveTest extends LinearOpMode {
         liftServo = hardwareMap.servo.get("lift_servo");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
         ProgramName = "MRB_2_1_17_1";
+    }
+
+    public void liftServoIn() {
+        liftServo.setPosition(-0.3);
+    }
+
+    public void liftServoOut() {
+        liftServo.setPosition(0.8);
+    }
+
+    public void chooperClose() {
+        doorServo.setPosition(0.9);
+    }
+
+    public void chooperOpen() {
+        doorServo.setPosition(0.3);
+    }
+
+    public void intakeIn()
+    {
+    intakePower = 1;
+    }
+    public void intakeOut()
+    {
+        intakePower = -1;
+    }
+
+    public void intakeStop()
+    {
+        intakePower=0;
+    }
+    public void intakeJog()
+    {
+        intakePower=-1;
+        sleep(20);
+        intakePower=1;
+    }
+    public void fire()
+    {
+        shooterPower = 1;
+        sleep(800);
+        shooterPower = 0;
+    }
+    public void ceaseFire()
+    {
+        shooterPower = 0;
+    }
+    public void liftUp()
+    {
+        liftPower = (float) -.75;
+    }
+    public void liftDown()
+    {
+        liftPower = (float) 0.5;
+    }
+    public void liftStop()
+    {
+        liftPower = 0;
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        IntHardware();
         telemetry.addData("Mode", "waiting");
         telemetry.addLine("ProgramName = " + ProgramName);
         telemetry.update();
@@ -45,24 +109,23 @@ public class MRBDriveTest extends LinearOpMode {
 
         //intakeMotor.setPower(0);
         liftDrive = false;
-        doorServo.setPosition(0.9);
-        liftServo.setPosition(-0.3);
-        intakePower = 0;
-        shooterPower = 0;
+        chooperClose();
+        liftServoIn();
+        intakeStop();
+        ceaseFire();
         leftY = 0;
         rightY = 0;
-        liftPower = 0;
+        liftStop();
+        liftDrive = false;
         waitForStart();
         autoShoot.start();
-        doorServo.setPosition(0.9);
-        liftServo.setPosition(-0.3);
+        chooperClose();
+        liftServoIn();
 
 
 
 
         try {
-            liftDrive = false;
-
             while (opModeIsActive()) {
                 //shooterMotor.setPower(0);
 
@@ -103,14 +166,14 @@ public class MRBDriveTest extends LinearOpMode {
 
                 //Gamepad 1 Commands
                 if (gamepad1.dpad_up)
-                    intakePower=1;
+                    intakeIn();
                 if (gamepad1.dpad_down)
-                    intakePower=-1;
+                    intakeOut();
                 if (gamepad1.a)
-                    intakePower=0;
+                    intakeStop();
 
                 if (gamepad1.y)
-                    shooterPower=0;
+                    ceaseFire();
 
                 if (gamepad1.b)
                 {
@@ -118,52 +181,50 @@ public class MRBDriveTest extends LinearOpMode {
                 }
 
                 if (gamepad1.left_bumper) {
-                    liftServo.setPosition(-0.3);
+                    liftServoIn();
                 }
                 if (gamepad1.right_bumper) {
-                    liftServo.setPosition(0.8);
+                    liftServoOut();
 
                 }
                 // Gamepad 2 commands
                 if (gamepad2.a) {
+                    /*
                     beaconPosition = 0.5;
                     beaconServo.setPosition(0.5);
+                    */
                 }
                 if (gamepad2.b) {
-                    beaconPosition = 0.6;
+                    //beaconPosition = 0.6;
                 }
                 if (gamepad2.y) {
-                    beaconPosition = 1.0;
-                    beaconServo.setPosition(1.0);
+                    /*beaconPosition = 1.0;
+                    beaconServo.setPosition(1.0);*/
                 }
                 if (gamepad2.x)
                 {
-                    shooterPower=1;
-                    sleep(800);
-                    shooterPower=0;
+
                 }
                 if (gamepad2.dpad_left)
                 {
-                    intakePower=-1;
-                    sleep(20);
-                    intakePower=1;
+                    intakeJog();
                 }
 
                 if (gamepad2.right_bumper)
                 {
-                    doorServo.setPosition(0.9);
+                    chooperClose();
                 }
                 if (gamepad2.left_bumper)
                 {
-                    doorServo.setPosition(0.3);
+                    chooperOpen();
                 }
                 if (gamepad2.dpad_up)
                 {
-                    liftPower = (float) -.75;
+                   liftUp();
                 }
                 if (gamepad2.dpad_down)
                 {
-                    liftPower = (float) 0.5;
+                    liftDown();
                 }
                 if (gamepad2.right_trigger > .5)
                 {
@@ -189,6 +250,7 @@ public class MRBDriveTest extends LinearOpMode {
                 intakeMotor1.setPower(Range.clip(intakePower, -1.0, 1.0));
                 intakeMotor2.setPower(Range.clip(intakePower, -1.0, 1.0));
                 liftMotor.setPower(Range.clip(liftPower, -1.0, 1.0));
+                shooterMotor.setPower(Range.clip(shooterPower, -1.0, 1.0));
 
                 telemetry.addData("Mode", "running");
                 telemetry.addLine("ProgramName = " + ProgramName);
@@ -232,21 +294,15 @@ public class AutoShoot extends Thread
         try {
             while (!interrupted()) {
                 if (gamepad1.x) {
-                    doorServo.setPosition(0.3);
-                    doorPosition = 0.1;
+                    chooperOpen();
                     sleep(700);
-                    doorServo.setPosition(0.9);
-                    doorPosition = 0.3;
+                    chooperClose();
                     sleep(200);
-                    shooterMotor.setPower(1);
-                    sleep(800);
-                    shooterMotor.setPower(0);
+                    fire();
                 }
                 if (gamepad2.dpad_right)
                 {
-                    shooterMotor.setPower(1);
-                    sleep(800);
-                    shooterMotor.setPower(0);
+                    fire();
                 }
 
                 idle();
@@ -255,7 +311,6 @@ public class AutoShoot extends Thread
         catch (InterruptedException e) {}
 
     }
-
 }
 
         }
