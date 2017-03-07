@@ -20,87 +20,16 @@ public class MRBDriveTest extends LinearOpMode {
     double doorPosition, beaconPosition;
     public boolean liftDrive;
     Thread autoShoot = new AutoShoot();
+    Robot robot;
     // called when init button is  pressed.
 
 
-    public void IntHardware() {
-        leftMotor = hardwareMap.dcMotor.get("left_motor");
-        rightMotor = hardwareMap.dcMotor.get("right_motor");
-        intakeMotor1 = hardwareMap.dcMotor.get("intake_motor1");
-        intakeMotor2 = hardwareMap.dcMotor.get("intake_motor2");
-        shooterMotor = hardwareMap.dcMotor.get("shooter_motor");
-        liftMotor = hardwareMap.dcMotor.get("lift_motor");
-        doorServo = hardwareMap.servo.get("door_servo");
-        beaconServo = hardwareMap.servo.get("beacon_servo");
-        beaconColor = hardwareMap.colorSensor.get("beacon_color");
-        liftServo = hardwareMap.servo.get("lift_servo");
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        ProgramName = "MRB_2_1_17_1";
-    }
-
-    public void liftServoIn() {
-        liftServo.setPosition(-0.3);
-    }
-
-    public void liftServoOut() {
-        liftServo.setPosition(0.8);
-    }
-
-    public void chooperClose() {
-        doorServo.setPosition(0.9);
-    }
-
-    public void chooperOpen() {
-        doorServo.setPosition(0.3);
-    }
-
-    public void intakeIn()
-    {
-    intakePower = 1;
-    }
-    public void intakeOut()
-    {
-        intakePower = -1;
-    }
-
-    public void intakeStop()
-    {
-        intakePower=0;
-    }
-    public void intakeJog()
-    {
-        intakePower=-1;
-        sleep(20);
-        intakePower=1;
-    }
-    public void fire()
-    {
-        shooterPower = 1;
-        sleep(800);
-        shooterPower = 0;
-    }
-    public void ceaseFire()
-    {
-        shooterPower = 0;
-    }
-    public void liftUp()
-    {
-        liftPower = (float) -.75;
-    }
-    public void liftDown()
-    {
-        liftPower = (float) 0.5;
-    }
-    public void liftStop()
-    {
-        liftPower = 0;
-    }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        IntHardware();
+        robot.IntHardware();
         telemetry.addData("Mode", "waiting");
-        telemetry.addLine("ProgramName = " + ProgramName);
+        telemetry.addLine("ProgramName = " + robot.ProgramName);
         telemetry.update();
 
         // wait for start button.
@@ -109,18 +38,18 @@ public class MRBDriveTest extends LinearOpMode {
 
         //intakeMotor.setPower(0);
         liftDrive = false;
-        chooperClose();
-        liftServoIn();
-        intakeStop();
-        ceaseFire();
+        robot.chooperClose();
+        robot.liftServoIn();
+        robot.intakeStop();
+        robot.ceaseFire();
         leftY = 0;
         rightY = 0;
-        liftStop();
+        robot.liftStop();
         liftDrive = false;
         waitForStart();
         autoShoot.start();
-        chooperClose();
-        liftServoIn();
+        robot.chooperClose();
+        robot.liftServoIn();
 
 
 
@@ -144,8 +73,8 @@ public class MRBDriveTest extends LinearOpMode {
                         rinputY = 0;
                     else
                         rinputY = rightY;
-                 }
-               else if (liftDrive == true)
+                }
+                else if (liftDrive == true)
                 {
                     if (leftY <= .2 && leftY >= -0.2)
                         linputY = 0;
@@ -161,19 +90,19 @@ public class MRBDriveTest extends LinearOpMode {
                     rinputY = rightY;
                     linputY = leftY;
                 }
-            // end drive Code
+                // end drive Code
 
 
                 //Gamepad 1 Commands
                 if (gamepad1.dpad_up)
-                    intakeIn();
+                    robot.intakeIn();
                 if (gamepad1.dpad_down)
-                    intakeOut();
+                    robot.intakeOut();
                 if (gamepad1.a)
-                    intakeStop();
+                    robot.intakeStop();
 
                 if (gamepad1.y)
-                    ceaseFire();
+                    robot.ceaseFire();
 
                 if (gamepad1.b)
                 {
@@ -181,24 +110,24 @@ public class MRBDriveTest extends LinearOpMode {
                 }
 
                 if (gamepad1.left_bumper) {
-                    liftServoIn();
+                    robot.liftServoIn();
                 }
                 if (gamepad1.right_bumper) {
-                    liftServoOut();
+                    robot.liftServoOut();
 
                 }
                 // Gamepad 2 commands
                 if (gamepad2.a) {
-                    /*
+					/*
                     beaconPosition = 0.5;
                     beaconServo.setPosition(0.5);
-                    */
+					 */
                 }
                 if (gamepad2.b) {
                     //beaconPosition = 0.6;
                 }
                 if (gamepad2.y) {
-                    /*beaconPosition = 1.0;
+					/*beaconPosition = 1.0;
                     beaconServo.setPosition(1.0);*/
                 }
                 if (gamepad2.x)
@@ -207,24 +136,24 @@ public class MRBDriveTest extends LinearOpMode {
                 }
                 if (gamepad2.dpad_left)
                 {
-                    intakeJog();
+                    robot.intakeJog();
                 }
 
                 if (gamepad2.right_bumper)
                 {
-                    chooperClose();
+                    robot.chooperClose();
                 }
                 if (gamepad2.left_bumper)
                 {
-                    chooperOpen();
+                    robot.chooperOpen();
                 }
                 if (gamepad2.dpad_up)
                 {
-                   liftUp();
+                    robot.liftUp();
                 }
                 if (gamepad2.dpad_down)
                 {
-                    liftDown();
+                    robot.liftDown();
                 }
                 if (gamepad2.right_trigger > .5)
                 {
@@ -241,7 +170,7 @@ public class MRBDriveTest extends LinearOpMode {
                 else
                 {
                     colorState = "Unknown";
-             }
+                }
 
                 beaconServo.setPosition(beaconPosition);
 
@@ -281,37 +210,39 @@ public class MRBDriveTest extends LinearOpMode {
 
     }
 
-public class AutoShoot extends Thread
-{
-    AutoShoot()
+    public class AutoShoot extends Thread
     {
-        this.setName("AutoShoot");
+        AutoShoot()
+        {
+            this.setName("AutoShoot");
 
-    }
-    @Override
-    public void run()
-    {
-        try {
-            while (!interrupted()) {
-                if (gamepad1.x) {
-                    chooperOpen();
-                    sleep(700);
-                    chooperClose();
-                    sleep(200);
-                    fire();
-                }
-                if (gamepad2.dpad_right)
-                {
-                    fire();
-                }
+        }
+        @Override
+        public void run()
+        {
+            try {
+                while (!interrupted()) {
+                    if (gamepad1.x) {
+                        robot.chooperOpen();
+                        sleep(200);
+                        robot.chooperClose();
+                        sleep(200);
+                        robot.fire();
+                        sleep(700);
+                        robot.ceaseFire();
+                    }
+                    if (gamepad2.dpad_right)
+                    {
+                        robot.fire();
+                    }
 
-                idle();
+                    idle();
+                }
             }
-        }
-        catch (InterruptedException e) {}
+            catch (InterruptedException e) {}
 
+        }
     }
-}
 
-        }
+}
 
