@@ -19,6 +19,7 @@ public class Robot extends LinearOpMode {
     String ProgramName = "MRB_3_6_17_1";
     // called when init button is  pressed.
 
+
     public void IntHardware() {
         leftMotor = hardwareMap.dcMotor.get("left_motor");
         rightMotor = hardwareMap.dcMotor.get("right_motor");
@@ -50,43 +51,50 @@ public class Robot extends LinearOpMode {
     }
 
     public void intakeIn() {
-        intakePower = 1;
+        intakeMotor1.setPower(1);
+        intakeMotor2.setPower(1);
     }
 
     public void intakeOut() {
-        intakePower = -1;
+
+        intakeMotor1.setPower(-1);
+        intakeMotor2.setPower(-1);
     }
 
     public void intakeStop() {
-        intakePower = 0;
+
+        intakeMotor1.setPower(0);
+        intakeMotor2.setPower(0);
     }
 
     public void intakeJog() {
-        intakePower = -1;
+        intakeMotor1.setPower(-1);
+        intakeMotor2.setPower(-1);
         sleep(20);
-        intakePower = 1;
+        intakeMotor1.setPower(1);
+        intakeMotor2.setPower(1);
     }
 
     public void fire() {
-        shooterPower = 1;
+        shooterMotor.setPower(1);
         sleep(800);
-        shooterPower = 0;
+        shooterMotor.setPower(0);
     }
 
     public void ceaseFire() {
-        shooterPower = 0;
+        shooterMotor.setPower(0);
     }
 
     public void liftUp() {
-        liftPower = (float) -.75;
+        liftMotor.setPower(-0.75);
     }
 
     public void liftDown() {
-        liftPower = (float) 0.5;
+        liftMotor.setPower(0.5);
     }
 
     public void liftStop() {
-        liftPower = 0;
+        liftMotor.setPower(0);
     }
 
     @Override

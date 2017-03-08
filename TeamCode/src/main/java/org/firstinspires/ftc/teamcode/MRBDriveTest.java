@@ -12,15 +12,12 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 @TeleOp(name="MRBDriveTest", group="Exercises")
 //@Disabled
 public class MRBDriveTest extends LinearOpMode {
-    DcMotor leftMotor, rightMotor, intakeMotor1, intakeMotor2, shooterMotor, liftMotor;
-    Servo doorServo, beaconServo, liftServo;
-    ColorSensor beaconColor;
     float leftY, rightY, linputY, rinputY, shooterPower, intakePower, liftPower;
     String ProgramName, colorState;
     double doorPosition, beaconPosition;
     public boolean liftDrive;
     Thread autoShoot = new AutoShoot();
-    Robot robot;
+    Robot robot = new Robot();
     // called when init button is  pressed.
 
 
@@ -90,6 +87,8 @@ public class MRBDriveTest extends LinearOpMode {
                     rinputY = rightY;
                     linputY = leftY;
                 }
+                robot.leftMotor.setPower(linputY);
+                robot.rightMotor.setPower(rinputY);
                 // end drive Code
 
 
@@ -157,13 +156,13 @@ public class MRBDriveTest extends LinearOpMode {
                 }
                 if (gamepad2.right_trigger > .5)
                 {
-                    liftPower = (float) 0;
+                    robot.liftStop();
                 }
-                if (beaconColor.red() <= beaconColor.blue())
+                if (robot.beaconColor.red() <= robot.beaconColor.blue())
                 {
                     colorState = "Blue";
                 }
-                else if(beaconColor.red() >= beaconColor.blue())
+                else if(robot.beaconColor.red() >= robot.beaconColor.blue())
                 {
                     colorState = "Red";
                 }
@@ -172,14 +171,10 @@ public class MRBDriveTest extends LinearOpMode {
                     colorState = "Unknown";
                 }
 
-                beaconServo.setPosition(beaconPosition);
 
-                leftMotor.setPower(Range.clip(linputY, -1.0, 1.0));
-                rightMotor.setPower(Range.clip(rinputY, -1.0, 1.0));
-                intakeMotor1.setPower(Range.clip(intakePower, -1.0, 1.0));
-                intakeMotor2.setPower(Range.clip(intakePower, -1.0, 1.0));
-                liftMotor.setPower(Range.clip(liftPower, -1.0, 1.0));
-                shooterMotor.setPower(Range.clip(shooterPower, -1.0, 1.0));
+                robot.leftMotor.setPower(Range.clip(linputY, -1.0, 1.0));
+                robot.rightMotor.setPower(Range.clip(rinputY, -1.0, 1.0));
+
 
                 telemetry.addData("Mode", "running");
                 telemetry.addLine("ProgramName = " + ProgramName);
@@ -193,11 +188,10 @@ public class MRBDriveTest extends LinearOpMode {
                     telemetry.addLine("Lift Drive");
                 }
                 telemetry.addData("output", "left=" + linputY + " right=" + rinputY);
-                telemetry.addData("intakeStructure", " shooter =" + shooterPower + " intake =" + intakePower);
-                telemetry.addData("lift", liftPower);
-                telemetry.addData("DoorServo", " Door Position = " + doorServo.getPosition());
-                telemetry.addData("BeaconServo", " Beacon Position = " + beaconPosition);
-                telemetry.addData("LiftServo: ", liftServo.getPosition());
+                telemetry.addData("intakeStructure", " shooter =" + robot.shooterMotor.getPower() + " intake =" + robot.intakeMotor1.getPower());
+                telemetry.addData("lift", robot.liftMotor.getPower());
+                telemetry.addData("DoorServo", " Door Position = " + robot.doorServo.getPosition());
+                telemetry.addData("LiftServo: ", robot.liftServo.getPosition());
                 telemetry.update();
 
                 idle();
