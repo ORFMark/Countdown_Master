@@ -9,24 +9,41 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
 
+
 @TeleOp(name="MRBDriveTest", group="Exercises")
 //@Disabled
 public class MRBDriveTest extends LinearOpMode {
-    float leftY, rightY, linputY, rinputY, shooterPower, intakePower, liftPower;
-    String ProgramName, colorState;
-    double doorPosition, beaconPosition;
+    public float leftY, rightY;
     public boolean liftDrive;
+    RobotCommon robot = new RobotCommon();
     Thread autoShoot = new AutoShoot();
-    Robot robot = new Robot();
+    //Robot robot = new Robot();
     // called when init button is  pressed.
 
 
 
+    /*public float slew(float StickValue)
+    {
+        float change = oldStick - StickValue;
+        if (StickValue == 0 && change == 0)
+            change = 0;
+        else if (change >= .1 && StickValue >= 0)f
+            change = (float) 0.1;
+        else if (change <= -.1 && StickValue <= 0)
+            change = (float) -0.1;
+        else
+            change = StickValue;
+        oldStick = change;
+        return change;
+    }
+    */
+
+
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.IntHardware();
+        robot.intHardware(this);
         telemetry.addData("Mode", "waiting");
-        telemetry.addLine("ProgramName = " + robot.ProgramName);
+        telemetry.addLine("ProgramName = " + robot.ProgramVersion);
         telemetry.update();
 
         // wait for start button.
@@ -54,42 +71,13 @@ public class MRBDriveTest extends LinearOpMode {
         try {
             while (opModeIsActive()) {
                 //shooterMotor.setPower(0);
-
-
                 // Drive Code
                 leftY = gamepad1.left_stick_y;
                 rightY = gamepad1.right_stick_y;
-                //Stick Dead Zone
-                if (liftDrive == false) {
-                    if (leftY <= .2 && leftY >= -0.2)
-                        linputY = 0;
-                    else
-                        linputY = leftY;
-
-                    if (rightY <= .2 && rightY >= -.2)
-                        rinputY = 0;
-                    else
-                        rinputY = rightY;
-                }
-                else if (liftDrive == true)
-                {
-                    if (leftY <= .2 && leftY >= -0.2)
-                        linputY = 0;
-                    else
-                        linputY = leftY * (float) 0.6;
-
-                    if (rightY <= .2 && rightY >= -.2)
-                        rinputY = 0;
-                    else
-                        rinputY = rightY * (float) 0.6;
-                }
-                else {
-                    rinputY = rightY;
-                    linputY = leftY;
-                }
-                robot.leftMotor.setPower(linputY);
-                robot.rightMotor.setPower(rinputY);
+                robot.leftMotor.setPower(robot.drive(leftY));
+                robot.rightMotor.setPower(robot.drive(rightY));
                 // end drive Code
+
 
 
                 //Gamepad 1 Commands
@@ -99,20 +87,20 @@ public class MRBDriveTest extends LinearOpMode {
                     robot.intakeOut();
                 if (gamepad1.a)
                     robot.intakeStop();
-
                 if (gamepad1.y)
                     robot.ceaseFire();
 
                 if (gamepad1.b)
                 {
                     liftDrive = !liftDrive;
+                    sleep(100);
                 }
 
                 if (gamepad1.left_bumper) {
-                    robot.liftServoIn();
+                    //liftServoIn();
                 }
                 if (gamepad1.right_bumper) {
-                    robot.liftServoOut();
+                    //liftServoOut();
 
                 }
                 // Gamepad 2 commands
@@ -123,11 +111,10 @@ public class MRBDriveTest extends LinearOpMode {
 					 */
                 }
                 if (gamepad2.b) {
-                    //beaconPosition = 0.6;
+                    robot.liftServoIn();
                 }
                 if (gamepad2.y) {
-					/*beaconPosition = 1.0;
-                    beaconServo.setPosition(1.0);*/
+					robot.liftServoOut();
                 }
                 if (gamepad2.x)
                 {
@@ -135,7 +122,7 @@ public class MRBDriveTest extends LinearOpMode {
                 }
                 if (gamepad2.dpad_left)
                 {
-                    robot.intakeJog();
+                    robot.intakeJog(this);
                 }
 
                 if (gamepad2.right_bumper)
@@ -158,27 +145,12 @@ public class MRBDriveTest extends LinearOpMode {
                 {
                     robot.liftStop();
                 }
-                if (robot.beaconColor.red() <= robot.beaconColor.blue())
-                {
-                    colorState = "Blue";
-                }
-                else if(robot.beaconColor.red() >= robot.beaconColor.blue())
-                {
-                    colorState = "Red";
-                }
-                else
-                {
-                    colorState = "Unknown";
-                }
-
-
-                robot.leftMotor.setPower(Range.clip(linputY, -1.0, 1.0));
-                robot.rightMotor.setPower(Range.clip(rinputY, -1.0, 1.0));
 
 
                 telemetry.addData("Mode", "running");
-                telemetry.addLine("ProgramName = " + ProgramName);
+                telemetry.addLine(robot.ProgramVersion);
                 telemetry.addData("sticks", "  left=" + leftY + "  right=" + rightY);
+                telemetry.addData("shooterEncoder: ",robot.shooterMotor.getCurrentPosition());
                 if (liftDrive == false)
                 {
                     telemetry.addLine("Normal Driving");
@@ -187,11 +159,11 @@ public class MRBDriveTest extends LinearOpMode {
                 {
                     telemetry.addLine("Lift Drive");
                 }
-                telemetry.addData("output", "left=" + linputY + " right=" + rinputY);
-                telemetry.addData("intakeStructure", " shooter =" + robot.shooterMotor.getPower() + " intake =" + robot.intakeMotor1.getPower());
-                telemetry.addData("lift", robot.liftMotor.getPower());
+                telemetry.addData("output", "left=" + robot.drive(leftY) + " right=" + robot.drive(leftY));
+                telemetry.addData("intakeStructure", " shooter =" + robot.shooterMotor.getPower() + " intake =" + robot.intakeMotor.getPower());
+                telemetry.addData("lift", robot.liftMotor1.getPower() + " , ", robot.liftMotor2.getPower());
                 telemetry.addData("DoorServo", " Door Position = " + robot.doorServo.getPosition());
-                telemetry.addData("LiftServo: ", robot.liftServo.getPosition());
+                //telemetry.addData("LiftServo: ", robot.liftServo.getPosition());
                 telemetry.update();
 
                 idle();
@@ -218,11 +190,10 @@ public class MRBDriveTest extends LinearOpMode {
                 while (!interrupted()) {
                     if (gamepad1.x) {
                         robot.chooperOpen();
-                        sleep(200);
+                        sleep(700);
                         robot.chooperClose();
                         sleep(200);
                         robot.fire();
-                        sleep(700);
                         robot.ceaseFire();
                     }
                     if (gamepad2.dpad_right)
