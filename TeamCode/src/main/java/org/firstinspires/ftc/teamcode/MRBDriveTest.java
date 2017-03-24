@@ -150,6 +150,7 @@ public class MRBDriveTest extends LinearOpMode {
                 telemetry.addData("Mode", "running");
                 telemetry.addLine(robot.ProgramVersion);
                 telemetry.addData("sticks", "  left=" + leftY + "  right=" + rightY);
+                telemetry.addData("DrivePower: ", "Left: " + robot.leftMotor.getPower() + "Right: " + robot.rightMotor.getPower());
                 telemetry.addData("shooterEncoder: ",robot.shooterMotor.getCurrentPosition());
                 if (liftDrive == false)
                 {

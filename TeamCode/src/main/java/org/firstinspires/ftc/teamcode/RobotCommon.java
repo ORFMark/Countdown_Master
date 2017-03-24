@@ -13,6 +13,8 @@ public class RobotCommon {
     Servo doorServo, liftServo;
     DcMotor leftMotor, rightMotor, intakeMotor, shooterMotor, liftMotor1, liftMotor2;
     String ProgramVersion;
+    Thread drive;
+
 
 
     public RobotCommon() {
@@ -32,7 +34,7 @@ public void intHardware(LinearOpMode op)
     liftServo = op.hardwareMap.servo.get("lift_servo");
     rightMotor.setDirection(DcMotor.Direction.REVERSE);
     shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    ProgramVersion = "MRB_3_21_2017_1";
+    ProgramVersion = "MRB_3_24_2017_2";
 }
     public void liftServoIn() {
         liftServo.setPosition(0.5);
@@ -97,30 +99,55 @@ public void intHardware(LinearOpMode op)
         liftMotor2.setPower(0);
 
     }
-public float drive(float stick)
-{
-    float output=0;
+public float drive(float stick){
+    float output = stick;
     float slew = 0;
     float oldstick = 0;
     float change = 0;
-        if (stick != 0) {
-            if (stick <= .2 && stick >= -0.2)
-                output = 0;
-            else
-                stick = output;
-        } else {
-            stick = output;
-        }
+    float newstick = 0;
 
-    if (stick== 0 && change == 0)
-        change = 0;
-    else if (change >= .1 && stick >= 0)
-            change = (oldstick + (float) 0.1);
-    else if (change <= -.1 && stick <= 0)
-        change = (oldstick + (float) -0.1);
+    if (stick != 0) {
+        if (stick <= .2 && stick >= -0.2)
+            output = 0;
+        else
+            output = stick;
+    } else {
+        output = stick;
+    }
+    change = java.lang.Math.abs(output) - java.lang.Math.abs(oldstick);
+    if (output == 0) {
+        newstick = 0;
+    }
+    else if (output >= 0)
+    {
+        if (change >= 0.05)
+        {
+            newstick = oldstick + (float) 0.05;
+        }
+        else if (change <= -0.05)
+        {
+            newstick = oldstick - (float) 0.05;
+        }
+        else newstick = output;
+    }
+    else if (output <= 0)
+    {
+        if (change >= 0.05)
+        {
+            newstick = oldstick - (float) 0.05;
+        }
+        else if (change <= -0.05)
+        {
+            newstick = oldstick + (float) 0.05;
+        }
+        else
+        {
+            newstick = output;
+        }
+    }
     else
-        change = stick;
-    oldstick = change;
-    return change;
+        newstick = output;
+    oldstick = newstick;
+    return newstick;
 }
 }
