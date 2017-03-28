@@ -74,7 +74,7 @@ public class MRBDriveTest extends LinearOpMode {
                 // Drive Code
                 leftY = gamepad1.left_stick_y;
                 rightY = gamepad1.right_stick_y;
-                robot.leftMotor.setPower(robot.drive(leftY));
+                robot.leftMotor.setPower(robot.drive(rightY));
                 robot.rightMotor.setPower(robot.drive(rightY));
                 // end drive Code
 

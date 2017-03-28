@@ -13,7 +13,7 @@ public class RobotCommon {
     Servo doorServo, liftServo;
     DcMotor leftMotor, rightMotor, intakeMotor, shooterMotor, liftMotor1, liftMotor2;
     String ProgramVersion;
-    Thread drive;
+
 
 
 
@@ -99,12 +99,12 @@ public void intHardware(LinearOpMode op)
         liftMotor2.setPower(0);
 
     }
-public float drive(float stick){
-    float output = stick;
-    float slew = 0;
-    float oldstick = 0;
-    float change = 0;
-    float newstick = 0;
+public float  drive(float stick){
+    float output;
+    float slew;
+    float change;
+
+    Thread drive;
 
     if (stick != 0) {
         if (stick <= .2 && stick >= -0.2)
@@ -114,6 +114,8 @@ public float drive(float stick){
     } else {
         output = stick;
     }
+    float newstick = output;
+    float oldstick = newstick;
     change = java.lang.Math.abs(output) - java.lang.Math.abs(oldstick);
     if (output == 0) {
         newstick = 0;
