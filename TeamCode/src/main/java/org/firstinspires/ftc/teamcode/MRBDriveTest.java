@@ -74,8 +74,7 @@ public class MRBDriveTest extends LinearOpMode {
                 // Drive Code
                 leftY = gamepad1.left_stick_y;
                 rightY = gamepad1.right_stick_y;
-                robot.leftMotor.setPower(robot.drive(rightY));
-                robot.rightMotor.setPower(robot.drive(rightY));
+                robot.tankdrive(leftY, rightY, false);
                 // end drive Code
 
 
@@ -156,11 +155,9 @@ public class MRBDriveTest extends LinearOpMode {
                 {
                     telemetry.addLine("Normal Driving");
                 }
-                if (liftDrive == true)
-                {
+                if (liftDrive == true) {
                     telemetry.addLine("Lift Drive");
                 }
-                telemetry.addData("output", "left=" + robot.drive(leftY) + " right=" + robot.drive(leftY));
                 telemetry.addData("intakeStructure", " shooter =" + robot.shooterMotor.getPower() + " intake =" + robot.intakeMotor.getPower());
                 telemetry.addData("lift", robot.liftMotor1.getPower() + " , ", robot.liftMotor2.getPower());
                 telemetry.addData("DoorServo", " Door Position = " + robot.doorServo.getPosition());

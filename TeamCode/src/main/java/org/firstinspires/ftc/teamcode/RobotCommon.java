@@ -99,12 +99,10 @@ public void intHardware(LinearOpMode op)
         liftMotor2.setPower(0);
 
     }
-public float  drive(float stick){
+public float  Slewdrive(float stick){
     float output;
     float slew;
     float change;
-
-    Thread drive;
 
     if (stick != 0) {
         if (stick <= .2 && stick >= -0.2)
@@ -152,4 +150,36 @@ public float  drive(float stick){
     oldstick = newstick;
     return newstick;
 }
+    public void tankdrive(float left, float right, boolean corrected)
+    {
+        float leftOutput, rightOutput;
+        if (left != 0) {
+            if (left <= .2 && left >= -0.2)
+                leftOutput = 0;
+            else
+                leftOutput = left;
+        } else {
+            leftOutput = left;
+        }
+        if (right != 0) {
+            if (right <= .2 && right >= -0.2)
+                rightOutput = 0;
+            else
+                rightOutput = right;
+        } else {
+            rightOutput = right;
+        }
+
+        if (corrected)
+        {
+            leftMotor.setPower(Slewdrive(leftOutput));
+            rightMotor.setPower(Slewdrive(rightOutput));
+        }
+        else
+        {
+            leftMotor.setPower(leftOutput);
+            rightMotor.setPower(rightOutput);
+        }
+    }
 }
+
