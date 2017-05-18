@@ -42,7 +42,7 @@ public class BallAuto2 extends LinearOpMode {
         leftMotor.setPower(-0.5);
         rightMotor.setPower(-0.5);
 
-        sleep(1250);        // wait for 3.5 seconds.
+        sleep(2000);        // wait for 3.5 seconds.
 
         // set motor power to zero to stop motors.
 
@@ -53,10 +53,10 @@ public class BallAuto2 extends LinearOpMode {
 
         // now set motors, one forward one reverse. Should cause the bot to rotate.
 
-        leftMotor.setPower(-0.25);
-        rightMotor.setPower(0.25);
+        leftMotor.setPower(0.25);
+        rightMotor.setPower(-0.25);
 
-        sleep(1300); // adjust this delay to get the bot to rotate 90 degrees.
+        sleep(2050); // adjust this delay to get the bot to rotate 90 degrees.
 
         leftMotor.setPower(0.0);
         rightMotor.setPower(0.0);

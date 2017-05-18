@@ -34,7 +34,7 @@ public void intHardware(LinearOpMode op)
     liftServo = op.hardwareMap.servo.get("lift_servo");
     rightMotor.setDirection(DcMotor.Direction.REVERSE);
     shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    ProgramVersion = "MRB_5_17_2017_2";
+    ProgramVersion = "MRB_5_18_2017_2";
     chooperClose();
     liftServoIn();
     intakeStop();
@@ -190,46 +190,77 @@ public float  Slewdrive(float stick){
 
 
     }
-    public boolean autoBusy()
+
+    public void autoDriveStraight(double leftPower, int leftEncoder, double rightPower, int rightEncoder, LinearOpMode op)
     {
-        return leftMotor.isBusy() || rightMotor.isBusy();
-    }
-    public void autoDrive(double leftPower, int leftEncoder, double rightPower, int rightEncoder, LinearOpMode op)
-    {
+        boolean autoBusy = true;
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftMotor.setTargetPosition(leftEncoder);
         rightMotor.setTargetPosition(rightEncoder);
-        while (autoBusy() && op.opModeIsActive())
+        while (autoBusy && op.opModeIsActive())
         {
-            if (leftMotor.isBusy())
-            {
-                leftMotor.setPower(leftPower);
+            if (leftPower != 0) {
+                if (leftMotor.isBusy()) {
+                    leftMotor.setPower(leftPower);
+                } else {
+                    leftMotor.setPower(0);
+                }
             }
-            else
-            {
-                leftMotor.setPower(0);
-            }
-            if (rightMotor.isBusy())
-            {
-                rightMotor.setPower(rightPower);
-            }
-            else
-            {
-                rightMotor.setPower(0);
+            if (rightPower != 0) {
+                if (rightMotor.isBusy()) {
+                    rightMotor.setPower(rightPower);
+                } else {
+                    rightMotor.setPower(0);
+                }
             }
             op.telemetry.addLine(ProgramVersion);
-            op.telemetry.addLine("Mode: AutoDriving");
+            op.telemetry.addLine("Mode: AutoDriving Straight");
             op.telemetry.addData("leftBusy: ", leftMotor.isBusy() + " leftPower: ", leftMotor.getPower() + " LeftPosition: ", leftMotor.getCurrentPosition());
             op.telemetry.addData("rightBusy: ", rightMotor.isBusy() + " rightPower: ", rightMotor.getPower() + " rightPosition: ", leftMotor.getCurrentPosition());
             op.telemetry.update();
+            autoBusy = leftMotor.isBusy() || rightMotor.isBusy();
         }
         leftMotor.setPower(0);
         rightMotor.setPower(0);
         op.telemetry.addLine(ProgramVersion);
         op.telemetry.addLine("Mode: StopDrive");
+    }
+    public void autoLeftTurn(double power, int target, LinearOpMode op)
+    {
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotor.setTargetPosition(target);
+        leftMotor.setPower(power);
+        while(leftMotor.isBusy() && op.opModeIsActive()) {
+            op.telemetry.addLine(ProgramVersion);
+            op.telemetry.addLine("Mode: AutoDriving Left Turn");
+            op.telemetry.addData("leftBusy: ", leftMotor.isBusy() + " leftPower: ", leftMotor.getPower() + " LeftPosition: ", leftMotor.getCurrentPosition());
+            op.telemetry.update();
+        }
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
+    public void autoRightTurn(double power, int target, LinearOpMode op)
+    {
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setTargetPosition(target);
+        rightMotor.setPower(power);
+        while(rightMotor.isBusy() && op.opModeIsActive()) {
+            op.telemetry.addLine(ProgramVersion);
+            op.telemetry.addLine("Mode: AutoDriving Right Turn");
+            op.telemetry.addData("rightBusy: ", rightMotor.isBusy() + " rightPower: ", rightMotor.getPower() + " rightPosition: ", leftMotor.getCurrentPosition());
+            op.telemetry.update();
+        }
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
     }
 }
 

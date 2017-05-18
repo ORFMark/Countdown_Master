@@ -19,8 +19,15 @@ public class NewProject extends LinearOpMode{
         waitForStart();
 
             telemetry.addLine("Drive Forward, First leg");
-            robot.autoDrive(-0.25, -3000, -0.25, -3000, this);
-
+            robot.autoDriveStraight(-0.4, -3250, -0.4, -3250, this);
+            telemetry.addLine("First Turn");
+            robot.autoRightTurn(-.25, -1800, this);
+            telemetry.addLine("Getting Ball");
+            sleep(1000);
+            robot.intakeIn();
+            robot.autoDriveStraight(-0.3, -2500, -0.3, -3000, this);
+            robot.intakeStop();
+        idle();
     }
 
 }
