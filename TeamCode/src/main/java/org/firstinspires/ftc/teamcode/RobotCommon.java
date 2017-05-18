@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import java.lang.Thread;
+
 
 
 /**
@@ -34,7 +34,14 @@ public void intHardware(LinearOpMode op)
     liftServo = op.hardwareMap.servo.get("lift_servo");
     rightMotor.setDirection(DcMotor.Direction.REVERSE);
     shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    ProgramVersion = "MRB_3_24_2017_2";
+    ProgramVersion = "MRB_5_17_2017_2";
+    chooperClose();
+    liftServoIn();
+    intakeStop();
+    ceaseFire();
+    liftStop();
+    rightMotor.setPower(0);
+    leftMotor.setPower(0);
 }
     public void liftServoIn() {
         liftServo.setPosition(0.5);
@@ -180,6 +187,49 @@ public float  Slewdrive(float stick){
             leftMotor.setPower(leftOutput);
             rightMotor.setPower(rightOutput);
         }
+
+
+    }
+    public boolean autoBusy()
+    {
+        return leftMotor.isBusy() || rightMotor.isBusy();
+    }
+    public void autoDrive(double leftPower, int leftEncoder, double rightPower, int rightEncoder, LinearOpMode op)
+    {
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotor.setTargetPosition(leftEncoder);
+        rightMotor.setTargetPosition(rightEncoder);
+        while (autoBusy() && op.opModeIsActive())
+        {
+            if (leftMotor.isBusy())
+            {
+                leftMotor.setPower(leftPower);
+            }
+            else
+            {
+                leftMotor.setPower(0);
+            }
+            if (rightMotor.isBusy())
+            {
+                rightMotor.setPower(rightPower);
+            }
+            else
+            {
+                rightMotor.setPower(0);
+            }
+            op.telemetry.addLine(ProgramVersion);
+            op.telemetry.addLine("Mode: AutoDriving");
+            op.telemetry.addData("leftBusy: ", leftMotor.isBusy() + " leftPower: ", leftMotor.getPower() + " LeftPosition: ", leftMotor.getCurrentPosition());
+            op.telemetry.addData("rightBusy: ", rightMotor.isBusy() + " rightPower: ", rightMotor.getPower() + " rightPosition: ", leftMotor.getCurrentPosition());
+            op.telemetry.update();
+        }
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+        op.telemetry.addLine(ProgramVersion);
+        op.telemetry.addLine("Mode: StopDrive");
     }
 }
 

@@ -52,10 +52,7 @@ public class MRBDriveTest extends LinearOpMode {
 
         //intakeMotor.setPower(0);
         liftDrive = false;
-        robot.chooperClose();
-        robot.liftServoIn();
-        robot.intakeStop();
-        robot.ceaseFire();
+
         leftY = 0;
         rightY = 0;
         robot.liftStop();
@@ -171,6 +168,7 @@ public class MRBDriveTest extends LinearOpMode {
         }
         catch (Exception e) {}
         autoShoot.interrupt();
+        robot = null;
 
     }
 
@@ -202,7 +200,8 @@ public class MRBDriveTest extends LinearOpMode {
                     idle();
                 }
             }
-            catch (InterruptedException e) {}
+            catch (InterruptedException e) {
+            }
 
         }
     }
