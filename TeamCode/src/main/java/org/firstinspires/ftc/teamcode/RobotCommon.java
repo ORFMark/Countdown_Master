@@ -34,7 +34,7 @@ public void intHardware(LinearOpMode op)
     liftServo = op.hardwareMap.servo.get("lift_servo");
     rightMotor.setDirection(DcMotor.Direction.REVERSE);
     shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    ProgramVersion = "MRB_5_18_2017_2";
+    ProgramVersion = "MRB_5_23_2017_1";
     chooperClose();
     liftServoIn();
     intakeStop();
@@ -221,7 +221,7 @@ public float  Slewdrive(float stick){
             op.telemetry.addData("leftBusy: ", leftMotor.isBusy() + " leftPower: ", leftMotor.getPower() + " LeftPosition: ", leftMotor.getCurrentPosition());
             op.telemetry.addData("rightBusy: ", rightMotor.isBusy() + " rightPower: ", rightMotor.getPower() + " rightPosition: ", leftMotor.getCurrentPosition());
             op.telemetry.update();
-            autoBusy = leftMotor.isBusy() || rightMotor.isBusy();
+            autoBusy = leftMotor.isBusy() && rightMotor.isBusy();
         }
         leftMotor.setPower(0);
         rightMotor.setPower(0);
