@@ -34,7 +34,7 @@ public void intHardware(LinearOpMode op)
     liftServo = op.hardwareMap.servo.get("lift_servo");
     rightMotor.setDirection(DcMotor.Direction.REVERSE);
     shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    ProgramVersion = "MRB_5_23_2017_1";
+    ProgramVersion = "MRB_6_2_2017_1";
     chooperClose();
     liftServoIn();
     intakeStop();
