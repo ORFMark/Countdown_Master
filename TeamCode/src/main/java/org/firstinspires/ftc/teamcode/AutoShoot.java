@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /**
  * Created by Mark on 6/2/2017.
  */
+@Autonomous(name = "AutoShoot", group = "exercises")
 public class AutoShoot extends LinearOpMode {
 
     public void runOpMode()
@@ -13,9 +15,8 @@ public class AutoShoot extends LinearOpMode {
         robot.intHardware(this);
 
         waitForStart();
-        robot.autoDriveStraight(-.3, -500, -.3, -500, this);
         robot.intakeIn();
-        robot.autoDriveStraight(-.3, -500, -.3, -500, this);
+        robot.autoDriveStraight(-.3, -750, -.3, -750, this);
         robot.chooperOpen();
         sleep(300);
         robot.shooterMotor.setPower(-1);
