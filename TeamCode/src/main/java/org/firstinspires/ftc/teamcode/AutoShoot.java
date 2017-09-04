@@ -18,12 +18,14 @@ public class AutoShoot extends LinearOpMode {
         robot.intakeIn();
         robot.autoDriveStraight(-.3, -750, -.3, -750, this);
         robot.chooperOpen();
-        sleep(300);
+        sleep(1000);
+        robot.chooperClose();
         robot.shooterMotor.setPower(-1);
         sleep(1000);
         robot.shooterMotor.setPower(0);
         robot.chooperClose();
         robot.intakeStop();
+        sleep(1000);
 
     }
 }
